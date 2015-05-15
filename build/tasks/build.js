@@ -13,15 +13,26 @@ var assign = Object.assign || require('object.assign');
 // the plumber() call prevents 'pipe breaking' caused
 // by errors from other gulp plugins
 // https://www.npmjs.com/package/gulp-plumber
-gulp.task('build-system', function () {
+
+gulp.task('build-system-ts', function () {
+  return gulp.src(paths.sourceTS)
+    .pipe(changed(paths.output, {extension: '.ts'}))
+    .pipe(ts({ noImplicitAny: true, target: 'es6', typescript: require('typescript') }))
+    .pipe(gulp.dest(paths.output));
+});
+
+gulp.task('build-system-js', function () {
   return gulp.src(paths.source)
     .pipe(plumber())
-    .pipe(changed(paths.output, {extension: ['.js', '.ts']}))
-    .pipe(ts({ noImplicitAny: true, target: 'es6' }))
+    .pipe(changed(paths.output, {extension: '.js'}))
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(to5(assign({}, compilerOptions, {modules:'system'})))
     .pipe(sourcemaps.write({includeContent: false, sourceRoot: paths.sourceMapRelativePath }))
     .pipe(gulp.dest(paths.output));
+});
+
+gulp.task('build-system', function (callback) {
+  return runSequence('build-system-ts', 'build-system-js', callback);
 });
 
 // copies changed html files to the output directory
