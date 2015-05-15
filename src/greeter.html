@@ -1,0 +1,7 @@
+<template>
+	<label repeat.for="language of ['cs', 'pl', 'sk']">
+		<span>${language}</span>
+		<input type="text" value.bind="Name[language]" />
+	</label>
+	<button click.delegate="save()">Save</button>
+</template>
