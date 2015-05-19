@@ -1,9 +1,10 @@
 <template>
 	${Title}
-	<article repeat.for="i of rows">
+	<article repeat.for="name of Names">
 	<label repeat.for="language of ['cs', 'pl', 'sk']">
 		<span>${language}</span>
-		<input type="text" value.bind="$parent.$parent.Name[language]" />
+		<input type="text" value.bind="$parent.name" />
+		<span>${$parent.name}</span>
 	</label>
 	</article>
 	<button click.delegate="save()">Save</button>
